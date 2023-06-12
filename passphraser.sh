@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Passphraser v1.0.0
+#
+# This program generates secure and memorable passphrases
+
 arguments=$(getopt --quiet --options "w:vh" --longoptions "wordCount:,verbose,version,help" -- $@)
 
 WORD_COUNT=3  # number of words in the generated passphrase
