@@ -1,6 +1,4 @@
 # Passphraser Scripts
-If you're looking for the main Passphraser application, you can find the [CLI here](https://github.com/80columns/passphraser-cli).
-
 Passphraser is an application which can be used to generate passwords which are both secure and memorable.
 
 A sample generated passphrase looks like this:
@@ -11,7 +9,9 @@ A sample generated passphrase looks like this:
 
 By default, generated passphrases have 3 words, 2 special characters, and a 4-digit number. This provides 78 bits of entropy, which is equivalent to the strength of a fully-random 12-character ASCII password.
 
-Passphraser is an application which can be used to generate passwords which are both secure and memorable.
+The benefit of using Passphraser is that a password like `*password2023security-INCREASED` is much more memorable than `tZ0e4Sc#63$h`, yet it provides the same level of security and only requires you to remember 6 distinct items instead of 12.
+
+If you're looking for the main Passphraser application or want guidance on using Passphraser, you can reference the [Passphraser CLI](https://github.com/80columns/passphraser-cli).
 
 ## Setting up Passphraser
 This repository contains scripts which implement the Passphraser features & algorithm. Sometimes when working in IT environments, you will be unable to install new applications on a server or workstation. In this situation it's useful to have self-contained scripts which can be copied to the target system as a text file and run in a shell using the built-in operating system utilities. The following scripts are available:
