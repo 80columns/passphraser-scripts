@@ -165,6 +165,20 @@ function Generate-Passphrase([int]$wordCount, [string[]]$wordlist) {
     return $passphrase.ToString();
 }
 
+# round the bit entropy up if its decimal value of the base 2 logarithm is >= 0.5
+# the calculation below is made because .NET doesn't have a floating point big number
+# type and the result of BigInteger.Log2() is truncated instead of rounded up or down
+function Get-RoundedBitEntropy([System.Numerics.BigInteger]$value) {
+    $bitEntropy = $BIGINT::Log2($value);
+    $remainder = $BIGINT::ModPow(2, $bitEntropy, $value);
+
+    if ($BIGINT::op_LessThan($BIGINT::op_Division($value, $BIGINT::new(2)), $remainder)) {
+        $bitEntropy += 1;
+    }
+
+    return $bitEntropy;
+}
+
 function Get-PassphraseStrength([int]$wordCount, [string[]]$wordlist) {
     $specialCharacterCount = $lowercaseWordCount = ($wordCount % 2 -eq 0) ? $MATH::Floor($wordCount / 2) : ($MATH::Floor($wordCount / 2) + 1);
     $numberCount = $uppercaseWordCount = $MATH::Floor($wordCount / 2);
@@ -197,7 +211,7 @@ function Get-PassphraseStrength([int]$wordCount, [string[]]$wordlist) {
 
     # this is a good explanation of password entropy calculation
     # https://crypto.stackexchange.com/a/376
-    $passphraseBitEntropy = $BIGINT::Log2($passphrasePermutations);
+    $passphraseBitEntropy = Get-RoundedBitEntropy $passphrasePermutations;
 
     return $(New-Object PsObject -Property @{
         passphrasePermutations=$passphrasePermutations;
@@ -219,7 +233,7 @@ function Get-ComparablePasswordStrength([System.Numerics.BigInteger]$passphraseP
 
     # previousPasswordPermutations is used here because at this point in the code passwordPermutations will be greater than passphrasePermutations
     # we need to return the maximum password permutations which is less than the passphrase permutations
-    $passwordBitEntropy = $BIGINT::Log2($previousPasswordPermutations);
+    $passwordBitEntropy = Get-RoundedBitEntropy $previousPasswordPermutations;
 
     return $(New-Object PsObject -Property @{
         passwordPermutations=$previousPasswordPermutations;

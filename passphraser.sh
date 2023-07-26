@@ -49,7 +49,7 @@ Options:
 get_log_base_2() {
     # https://stackoverflow.com/a/7962339 and https://stackoverflow.com/a/53532113
     number=$1
-    log_base_2=$(echo "x = l($number) / l(2); scale = 0; x / 1" | bc -l)
+    log_base_2=$(echo "x = l($number) / l(2); scale = 0; (x + 0.5) / 1" | bc -l)
 
     echo $log_base_2
 }
@@ -231,8 +231,6 @@ get_comparable_password_strength() {
         password_length=$((password_length + 1))
         password_permutations=$(echo "$valid_ascii_character_count ^ $password_length" | bc)
     done
-
-    echo "$password_permutations > $passphrase_permutations" >> out.txt
 
     # previous_password_permutations is used here because at this point in the code password_permutations will be greater than passphrase_permutations
     # we need to return the maximum password permutations which is less than the passphrase permutations
